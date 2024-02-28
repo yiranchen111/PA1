@@ -13,10 +13,9 @@ public class PA1 {
 
     public static void main(String[] args) {
         try {
-            // 读取文件路径，这里假设txt文件和java文件在同一文件夹内
-            String filePath = "/Users/yiranchen/Desktop/Backend/snowFlake/src/main/java/org/example/test1"; // 如果在同一目录下，使用相对路径
+            String filePath = "/Users/yiranchen/Desktop/Backend/snowFlake/src/main/java/org/example/test1";
             char[][] graph = readColorMatrixFromFile(filePath);
-            int[] start = new int[]{6, 2}; // Example start position
+            int[] start = new int[]{6, 2}; 
             solution(graph, 'X', 'g', start);
             System.out.println(res.size());
             for (List<Integer> pair : res) {
