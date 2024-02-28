@@ -1,3 +1,8 @@
+package org.example;
+
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -7,20 +12,18 @@ public class PA1 {
     private static int[][] move = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
 
     public static void main(String[] args) {
-        char[][] graph = {
-                {'B', 'B', 'B', 'R', 'R', 'R', 'R', 'R', 'R'},
-                {'B', 'B', 'B', 'B', 'R', 'R', 'X', 'X', 'X'},
-                {'R', 'R', 'R', 'R', 'R', 'R', 'X', 'X', 'X'},
-                {'Y', 'Y', 'Y', 'Y', 'R', 'R', 'R', 'X', 'X'},
-                {'Y', 'G', 'G', 'G', 'G', 'R', 'X', 'X', 'X'},
-                {'Y', 'G', 'G', 'G', 'R', 'R', 'X', 'X', 'X'},
-                {'Y', 'G', 'X', 'G', 'G', 'G', 'G', 'X', 'X'},
-                {'Y', 'G', 'X', 'X', 'X', 'X', 'X', 'X', 'X'}
-        };
-        int[] start = new int[]{6, 2}; // Corrected initialization
-        solution(graph, 'X', 'g', start);
-        for (List<Integer> pair : res) {
-            System.out.println(pair);
+        try {
+            // 读取文件路径，这里假设txt文件和java文件在同一文件夹内
+            String filePath = "/Users/yiranchen/Desktop/Backend/snowFlake/src/main/java/org/example/test1"; // 如果在同一目录下，使用相对路径
+            char[][] graph = readColorMatrixFromFile(filePath);
+            int[] start = new int[]{6, 2}; // Example start position
+            solution(graph, 'X', 'g', start);
+            System.out.println(res.size());
+            for (List<Integer> pair : res) {
+                System.out.println(pair);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
@@ -37,10 +40,29 @@ public class PA1 {
         }
         res.add(Arrays.asList(x, y));
         array[x][y] = replace;
-        for (int i = 0; i < move.length; i++) {
-            int dx = move[i][0];
-            int dy = move[i][1];
-            dfs(array, target, replace, x + dx, y + dy);
+        for (int[] direction : move) {
+            int dx = x + direction[0];
+            int dy = y + direction[1];
+            dfs(array, target, replace, dx, dy);
         }
+    }
+
+    public static char[][] readColorMatrixFromFile(String filePath) throws IOException {
+        List<char[]> lines = new ArrayList<>();
+        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                char[] chars = line.replace(",", "").toCharArray();
+                lines.add(chars);
+            }
+        }
+
+        // Convert List<char[]> to char[][]
+        char[][] matrix = new char[lines.size()][];
+        for (int i = 0; i < lines.size(); i++) {
+            matrix[i] = lines.get(i);
+        }
+
+        return matrix;
     }
 }
